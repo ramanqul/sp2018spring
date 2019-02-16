@@ -4,17 +4,18 @@
 #include <linux/slab.h>
 
 
+struct person_struct {
+	char* name;
+	int age;
+	struct list_head list;
+};
+
+
 static void list_example(void) {
-        struct person {
-                char* name;
-                int age;
-                struct list_head list;
-        };
         int i;
 
-        struct person *parent = kmalloc(sizeof(struct person), GFP_KERNEL);
-	struct list_head *head;
-        struct person *val;
+        struct person_struct *parent = kmalloc(sizeof(struct person_struct), GFP_KERNEL);
+        struct person_struct *val;
 
 
         parent->name = "Week3 example";
@@ -22,19 +23,17 @@ static void list_example(void) {
 
         INIT_LIST_HEAD(&parent->list);
 
-
         for (i=0;i<10;i++) {
-		struct person *fp = kmalloc(sizeof(struct person), GFP_KERNEL);
+		struct person_struct *fp = kmalloc(sizeof(struct person_struct), GFP_KERNEL);
 		fp->name = "Loop";
 		fp->age = i;
 
-		list_add_tail(&fp->list, &parent->list);
+		list_add_tail(&(fp->list), &parent->list);
 		printk(KERN_INFO "Item %d was added to tail of the list\n", i+1);
 	}
 
 
-	list_for_each(&head, &parent->list) {
-		val = list_entry(head, struct person, parent->list);
+	list_for_each_entry(val, &parent->list, list) {
 		printk(KERN_INFO "Person from list: name=%s, age=%d\n", val->name, val->age);
 	}
 }
