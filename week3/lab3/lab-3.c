@@ -17,7 +17,7 @@ void kfifo_example(void) {
 	int t;
 	int qsize;
 	struct kfifo queue;
-	struct mytask_struct *val_mytask;
+	struct mytask_struct val_mytask;
 	struct mytask_struct *maintask = kmalloc(sizeof(struct mytask_struct), GFP_KERNEL);
 
 	maintask->id = 1;
@@ -25,18 +25,15 @@ void kfifo_example(void) {
 
 	print_task(maintask);
 
-	//t = kfifo_alloc(&queue, 16, GFP_KERNEL);
-	INIT_KFIFO(queue);
+	t = kfifo_alloc(&queue, 16, GFP_KERNEL);
+	if (t != 0) {
+                return;
+        }
+	//INIT_KFIFO(queue);
 
 	qsize = kfifo_len(&queue);
 
 	printk(KERN_NOTICE "Queue size is %d", qsize);
-
-	/*it can't allocate kfifo may be because of memory shortage*/
-	if (t) {
-		return;
-	}
-
 	printk(KERN_NOTICE "Inserting into queue");
 
 	kfifo_in(&queue, maintask, sizeof(maintask));
@@ -49,16 +46,12 @@ void kfifo_example(void) {
 		printk(KERN_NOTICE "Queue is not empty, new size is %d", qsize);
 	}
 
-	printk(KERN_NOTICE "Peek from queue");
+	printk(KERN_NOTICE "Polling from queue");
 
-	t = kfifo_out(&queue, val_mytask, sizeof(struct mytask_struct));
-
-	if (t > 0) {
-		printk("Nothing was peeked from queue");
-	} else {
-		if (val_mytask != NULL) {
-			print_task(val_mytask);
-		}
+	while(!kfifo_is_empty(&queue)) 
+	{
+		kfifo_out(&queue, &val_mytask, sizeof(&val_mytask));
+		print_task(&val_mytask);
 	}
 
 	kfifo_free(&queue);
