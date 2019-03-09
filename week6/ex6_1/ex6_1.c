@@ -61,8 +61,6 @@ switch (scancode)
 static int __init irq_ex_init(void)
 {
     HANDLER_KEY = (void *)(irq_handler);
-    /* Free interrupt*/
-    free_irq(1,NULL);
     /*
     * Request IRQ 1, the keyboard IRQ, to go to our irq_handler.
     */
