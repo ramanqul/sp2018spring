@@ -22,6 +22,8 @@ MODULE_AUTHOR("Ramanqul");
 *   This example only has 3 key: ESC, F1 and F2
 */
 
+void* HANDLER_KEY;
+
 irqreturn_t irq_handler(int irq, void *dev_id)
 {
 /*
@@ -58,19 +60,19 @@ switch (scancode)
 */
 static int __init irq_ex_init(void)
 {
+    HANDLER_KEY = (void *)(irq_handler);
     /* Free interrupt*/
     free_irq(1,NULL);
-
     /*
     * Request IRQ 1, the keyboard IRQ, to go to our irq_handler.
     */
-    return request_irq (1, (irq_handler_t) irq_handler,IRQF_SHARED, "test_keyboard_irq_handler",(void *)(irq_handler));
+    return request_irq (1, (irq_handler_t) irq_handler,IRQF_SHARED, "test_keyboard_irq_handler", HANDLER_KEY);
 }
 
 static void __exit irq_ex_exit(void)
 {
     printk( KERN_INFO "! Module is unload... \n");
-    free_irq(1,NULL);
+    free_irq(1, HANDLER_KEY);
 }
 
 module_init(irq_ex_init);
