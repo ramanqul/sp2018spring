@@ -20,7 +20,7 @@ static int counter = 0;
 
 static int threadMethod(void *unused) {
     int i = 0;
-//    spin_lock(&lock);
+    spin_lock(&lock);
     int local_counter = counter; //read shared data
 /*	
     if (strcmp(current->comm, "mythread1") == 0) {
@@ -31,12 +31,12 @@ static int threadMethod(void *unused) {
 */
     for (i=0;i<5;i++) {
        printk(KERN_INFO "I'm %s, counter: %d", current->comm, local_counter);
-       ndelay(DELAY);
+       udelay(DELAY);
        local_counter++; //update 
     }
     
     counter = local_counter; //store back
-//    spin_unlock(&lock);
+    spin_unlock(&lock);
 
     return 0;
 }
