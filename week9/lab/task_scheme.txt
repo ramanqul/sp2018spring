@@ -1,0 +1,23 @@
+Lab 8
+
+global from, to = 0
+global array=[...1M elements generated...]
+
+int threadSort(void *data) {
+   //lock
+   //do sort between from and to inside array
+   //unlock
+}
+
+//decide what type of lock you will use?
+//find out how to generate random numbers
+//find out how to create array of 1M elements
+init() {
+   createThreads //pass threadSort method
+   //display millis to sort all elements
+}
+
+
+
+
+
