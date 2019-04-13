@@ -11,6 +11,12 @@ void exampleTimerFunc(struct timer_list *t) {
    printk(KERN_INFO "My timer has been executed!\n");
 }
 
+
+/*
+this example works for linux kernel 4.14 and higher 
+for older version please follow the link below:
+https://stackoverflow.com/questions/53839625/adaptation-from-old-init-timer-to-new-timer-setup
+*/
 void exampleWithTimer(void) {
    //int ret;
    printk( "Starting timer to fire in 1000ms (%ld)\n", jiffies );
