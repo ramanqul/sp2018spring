@@ -12,13 +12,15 @@ void exampleTimerFunc(struct timer_list *t) {
 }
 
 void exampleWithTimer(void) {
-   int ret;
+   //int ret;
+   printk( "Starting timer to fire in 1000ms (%ld)\n", jiffies );
+   mytimer.expires = jiffies + msecs_to_jiffies(1000);
    timer_setup(&mytimer, exampleTimerFunc, 0);
-   printk( "Starting timer to fire in 200ms (%ld)\n", jiffies );
-   ret = mod_timer(&mytimer, jiffies + msecs_to_jiffies(200) );
-   if (ret) {
-     printk("Error in mod_timer\n");
-   }
+
+   //ret = mod_timer(&mytimer, jiffies + msecs_to_jiffies(200) );
+   //if (ret) {
+   //  printk("Error in mod_timer\n");
+   //}
 
    add_timer(&mytimer);
 }
