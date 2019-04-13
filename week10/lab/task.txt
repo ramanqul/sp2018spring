@@ -1,0 +1,7 @@
+1. create a timer which will execute every second and print time.
+Use <linux/timer.h> to acomplish this task.
+
+2. <linux/hrtimer.h> create hrtimer and dynamically schedule it using fibonacci 
+sequence, so for example your timer starts running first 1nano, 1 nano, 2n, 3n, 5n, 
+10s. how many executins have been done between those timings.
+
