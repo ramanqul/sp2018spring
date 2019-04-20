@@ -4,6 +4,7 @@
 #include <linux/gfp.h>
 #include <linux/mm_types.h>
 #include <linux/types.h>
+#include <linux/time.h>
 
 #define TAG "week 11"
 
@@ -12,7 +13,13 @@ MODULE_LICENSE("GPL");
 struct page* mypages;
 
 void pageLevelAllocation(void) {
-   mypages = alloc_pages(0, 2); //2^2 = 4 pages will be allocated
+   struct timespec t1, t2; 
+   int page_order = 2;
+   getnstimeofday(&t1);
+   mypages = alloc_pages(GFP_KERNEL, page_order); //2^2 = 4 pages will be allocated
+   __free_pages(mypages, page_order);
+   getnstimeofday(&t2);
+   printk(KERN_INFO "%s time required is %ld\n", TAG, t2.tv_nsec - t1.tv_nsec);
 }
 
 
@@ -24,7 +31,6 @@ int init_module(void) {
 
 void cleanup_module(void) {
    printk(KERN_INFO "Cleanup %s\n", TAG);
-   free_pages(mypages, 2);
 }
 
 
